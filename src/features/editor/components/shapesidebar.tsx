@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/utils"
 import { ActiveTool, Editor } from "../types"
 import { ToolSidebarHeader } from "./tool-sidebar-header"
