@@ -12,6 +12,8 @@ import { ShapeSidebar } from "./shapesidebar"
 import { FillColorSidebar } from "./fill-color-sidebar"
 import { StrokeColorSidebar } from "./stroke-color-sidebar"
 import { StrokeWidthSidebar } from "./stroke-width-sidebar"
+import { OpacitySidebar } from "./opacity-sidebar"
+import { TextSidebar } from "./text-sidebar"
 
 export function Editor(){
     const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -51,7 +53,7 @@ export function Editor(){
                 preserveObjectStacking:true
             }
         );
-
+ 
         init({
             initialCanvas:canvas,
             initialContainer:containerRef.current!
@@ -89,6 +91,16 @@ export function Editor(){
                     onChangeActiveTool={onChangeActiveTool}
                 />
                 <StrokeWidthSidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <OpacitySidebar
+                    editor={editor}
+                    activeTool={activeTool}
+                    onChangeActiveTool={onChangeActiveTool}
+                />
+                <TextSidebar
                     editor={editor}
                     activeTool={activeTool}
                     onChangeActiveTool={onChangeActiveTool}
