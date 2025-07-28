@@ -1,13 +1,14 @@
-import { ActiveTool, Editor, FONT_WEIGHT } from "../types"
+import { ActiveTool, Editor, FONT_SIZE, FONT_WEIGHT } from "../types"
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, TrashIcon } from "lucide-react";
 import { BsBorderWidth } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { isTextType } from "../utils";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa6";
 import { useState } from "react";
+import { FontSizeInput } from "./font-size-input";
 
 interface ToolbarProps {
     editor: Editor | undefined;
@@ -27,6 +28,7 @@ export function Toolbar({
     const initialFontLineThrough = editor?.getActiveFontLineThrough()
     const initialFontUnderline = editor?.getActiveFontUnderline()
     const initialTextAlign = editor?.getActiveTextAlign();
+    const initialFontSize = editor?.getActiveFontSize() || FONT_SIZE
 
     const selectedObject = editor?.selectedObjects[0];
     const selectedObjectType = editor?.selectedObjects[0]?.type;
@@ -39,7 +41,8 @@ export function Toolbar({
         fontStyle:initialFontStyle,
         fontLineThrough:initialFontLineThrough,
         fontUnderline:initialFontUnderline,
-        textAlign:initialTextAlign
+        textAlign:initialTextAlign,
+        fontSize:initialFontSize
     })
 
     const isText = isTextType(selectedObjectType)
@@ -87,6 +90,14 @@ export function Toolbar({
 
         editor?.changeFontUnderline(newValue)
         setProperties((current)=>({...current,fontUnderline:newValue}))
+    }
+
+    const onChangeFontSize = (value:number)=>{
+        if(!selectedObject){
+            return;
+        }
+        editor?.changeFontSize(value);
+        setProperties(current=>({...current,fontSize:value}))
     }
 
     const onChangeTextAlign = (value:string) =>{
@@ -299,6 +310,15 @@ export function Toolbar({
                         </Hint>
                     </div>
                 }
+    
+                {
+                    isText && <div className="flex items-center h-full justify-center ">
+                        <FontSizeInput
+                            value={properties.fontSize}
+                            onChange={onChangeFontSize}
+                        />
+                    </div>
+                }
                 <div className="flex items-center h-full justify-center ">
                     <Hint label="Bring forward" side="bottom" sideOffset={5}>
                         <Button
@@ -338,6 +358,18 @@ export function Toolbar({
                             )}
                         >
                            <RxTransparencyGrid className="size-4" />
+                        </Button>
+                    </Hint>
+                </div>
+
+                <div className="flex items-center h-full justify-center ">
+                    <Hint label="Delete" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={()=>editor?.delete()}
+                            size="icon"
+                            variant="ghost"
+                        >
+                           <TrashIcon className="size-4" />
                         </Button>
                     </Hint>
                 </div>
