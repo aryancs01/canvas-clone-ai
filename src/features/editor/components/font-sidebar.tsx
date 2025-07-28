@@ -32,7 +32,7 @@ export function FontSidebar({
                 title="Font"
                 description="Change the text font"
             />
-            <ScrollArea className="h-full">
+            <ScrollArea className="overflow-y-hidden">
                 <div className="p-4 space-y-1 border-b"> 
                    {fonts.map((font:string)=>(
                     <Button

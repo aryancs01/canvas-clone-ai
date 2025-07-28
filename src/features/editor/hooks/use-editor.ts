@@ -2,9 +2,10 @@
 import { useCallback, useState, useMemo } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResize } from "./use-auto-resize"
-import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
+import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, FONT_WEIGHT, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
 import { useCanvasEvents } from "./use-canvas-events"
 import { isTextType } from "../utils"
+import { ITextboxOptions } from "fabric/fabric-impl"
 
 const buildEditor = ({
     canvas,
@@ -56,6 +57,91 @@ const buildEditor = ({
             }
             const value = selectedObject.get("opacity") || 1;
             return value;
+        },
+        changeTextAlign:(value: string)=>{
+            canvas.getActiveObjects().forEach((object)=>{
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({textAlign:value})
+                }
+            })
+            canvas.renderAll();
+        },
+        getActiveTextAlign:()=>{
+            const selectedObject = selectedObjects[0];
+            if(!selectedObject){
+                return "left"
+            }
+            //@ts-ignore
+            const value = selectedObject.get("textAlign") || "left";
+
+            return value;
+        },
+        changeFontUnderline:(value: boolean)=>{
+            canvas.getActiveObjects().forEach((object)=>{
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({underline:value})
+                }
+            })
+            canvas.renderAll();
+        },
+        getActiveFontUnderline:()=>{
+            const selectedObject = selectedObjects[0];
+            if(!selectedObject){
+                return false
+            }
+            //@ts-ignore
+            const value = selectedObject.get("underline") || false;
+
+            return value;
+        },
+        changeFontLineThrough:(value: boolean)=>{
+            canvas.getActiveObjects().forEach((object)=>{
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({linethrough:value})
+                }
+            })
+            canvas.renderAll();
+        },
+        getActiveFontLineThrough:()=>{
+            const selectedObject = selectedObjects[0];
+            if(!selectedObject){
+                return false
+            }
+            //@ts-ignore
+            const value = selectedObject.get("linethrough") || false;
+
+            return value;
+        },
+        changeFontStyle:(value: string)=>{
+            canvas.getActiveObjects().forEach((object)=>{
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({fontStyle:value})
+                }
+            })
+            canvas.renderAll();
+        },
+        getActiveFontStyle:()=>{
+            const selectedObject = selectedObjects[0];
+            if(!selectedObject){
+                return "normal"
+            }
+            //@ts-ignore
+            const value = selectedObject.get("fontStyle") || "normal";
+
+            return value;
+        },
+        changeFontWeight:(value:number)=>{
+            canvas.getActiveObjects().forEach((object)=>{
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({fontWeight:value})
+                }
+            })
+            canvas.renderAll();
         },
         changeOpacity:(value:number)=>{
             canvas.getActiveObjects().forEach((object)=>{
@@ -208,6 +294,16 @@ const buildEditor = ({
             addToCanvas(object)
         },
         canvas,
+        getActiveFontWeight:()=>{
+            const selectedObject = selectedObjects[0];
+            if(!selectedObject){
+                return FONT_WEIGHT
+            }
+            //@ts-ignore
+            const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
+
+            return value;
+        },
         getActiveFontFamily:()=>{
             const selectedObject = selectedObjects[0];
             if(!selectedObject){
