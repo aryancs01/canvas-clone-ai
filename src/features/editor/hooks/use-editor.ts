@@ -2,7 +2,7 @@
 import { useCallback, useState, useMemo } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResize } from "./use-auto-resize"
-import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
+import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
 import { useCanvasEvents } from "./use-canvas-events"
 import { isTextType } from "../utils"
 
@@ -16,7 +16,9 @@ const buildEditor = ({
     strokeWidth,
     selectedObjects,
     strokeDashArray,
-    setStrokeDashArray
+    setStrokeDashArray,
+    setFontFamily,
+    fontFamily
 }:BuildEditorProps): Editor=>{
     const getWorkspace = () => {
         return canvas
@@ -79,6 +81,16 @@ const buildEditor = ({
             canvas.renderAll()
             const workspace = getWorkspace()
             workspace?.sendToBack();
+        },
+        changeFontFamily:(value:string)=>{
+            setFontFamily(value);
+            canvas.getActiveObjects().forEach((object)=>{
+                if(isTextType(object.type)){
+                    //@ts-ignore
+                    object.set({fontFamily:value})
+                }
+            }) 
+            canvas.renderAll()
         },
         changeFillColor:(value:string)=>{
             setFillColor(value);
@@ -196,6 +208,16 @@ const buildEditor = ({
             addToCanvas(object)
         },
         canvas,
+        getActiveFontFamily:()=>{
+            const selectedObject = selectedObjects[0];
+            if(!selectedObject){
+                return fontFamily
+            }
+            //@ts-ignore
+            const value = selectedObject.get("fontFamily") || fontFamily;
+
+            return value;
+        },
         getActiveFillColor:()=>{
             const selectedObject = selectedObjects[0];
             if(!selectedObject){
@@ -247,6 +269,7 @@ export const useEditor = ({
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
 
+    const [fontFamily, setFontFamily] = useState(FONT_FAMILY)
     const [fillColor, setFillColor] = useState(FILL_COLOR)
     const [strokeColor, setStrokeColor] = useState(STROKE_COLOR)
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH)
@@ -270,7 +293,9 @@ export const useEditor = ({
                 setStrokeDashArray,
                 strokeWidth,
                 setStrokeWidth,
-                selectedObjects
+                selectedObjects,
+                fontFamily,
+                setFontFamily
             });
         }
 
@@ -281,7 +306,8 @@ export const useEditor = ({
         strokeColor,
         strokeWidth,
         selectedObjects,
-        strokeDashArray
+        strokeDashArray,
+        fontFamily
     ])
 
     const init = useCallback(({

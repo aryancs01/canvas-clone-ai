@@ -2,6 +2,27 @@ import {fabric} from "fabric"
 import { ITextboxOptions } from "fabric/fabric-impl";
 import * as material from "material-colors"
 
+export const fonts = [
+  "Arial",
+  "Arial Black",
+  "Verdana",
+  "Helvetica",
+  "Tahoma",
+  "Trebuchet MS",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Brush Script MT",
+  "Palatino",
+  "Bookman",
+  "Comic Sans MS",
+  "Impact",
+  "Lucida Sans Unicode",
+  "Geneva",
+  "Lucida Console"
+]
+
 export const selectionDependentTools = [
     "fill",
     "font",
@@ -123,11 +144,14 @@ export type BuildEditorProps = {
     strokeWidth:number,
     setStrokeWidth:(value:number)=>void;
     selectedObjects:fabric.Object[]
+    fontFamily:string;
+    setFontFamily:(value:string) => void
     strokeDashArray:number[]
     setStrokeDashArray:(value:number[])=>void  
 }
 
 export interface Editor {
+    getActiveFontFamily:()=>string;
     addText:(value:string, options?:ITextboxOptions)=>void;
     getActiveOpacity:()=>number; 
     changeOpacity:(value:number)=>void;
@@ -143,6 +167,7 @@ export interface Editor {
     addTriangle:()=>void
     addInverseTriangle:()=>void
     addDiamond:()=>void
+    changeFontFamily:(value:string) => void
     getActiveFillColor: ()=>string,
     getActiveStrokeColor: ()=>string, 
     getActiveStrokeWidth:()=>number;
