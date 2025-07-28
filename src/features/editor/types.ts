@@ -1,6 +1,16 @@
 import {fabric} from "fabric"
 import * as material from "material-colors"
 
+export const selectionDependentTools = [
+    "fill",
+    "font",
+    "filter",
+    "opacity",
+    "remvoe-bg",
+    "stroke-color",
+    "stroke-width"
+]
+
 export const colors = [
     material.red["500"],
     material.pink["500"],
@@ -44,6 +54,7 @@ export type ActiveTool =
 export const FILL_COLOR = "rgba(0,0,0,1)"
 export const STROKE_COLOR = "rgba(0,0,0,1)"
 export const STROKE_WIDTH = 2;
+export const STROKE_DASH_ARRAY = []
 
 export const CIRCLE_OPTIONS = {
     radius:225,
@@ -87,6 +98,10 @@ export const DIAMOND_OPTIONS = {
     angle:0
 }
 
+export interface EditorHookProps {
+    clearSelectionCallback?:()=>void
+}
+
 export type BuildEditorProps = {
     canvas: fabric.Canvas;
     fillColor:string;
@@ -96,21 +111,25 @@ export type BuildEditorProps = {
     strokeWidth:number,
     setStrokeWidth:(value:number)=>void;
     selectedObjects:fabric.Object[]
+    strokeDashArray:number[]
+    setStrokeDashArray:(value:number[])=>void  
 }
 
 export interface Editor {
     changeFillColor:(value:string)=>void
     changeStrokeWidth:(value:number)=>void
     changeStrokeColor:(value:string)=>void
+    changeStrokeDashArray:(value:number[])=>void
     addCircle:()=>void
     addSoftRectangle:()=>void
     addRectangle:()=>void
     addTriangle:()=>void
     addInverseTriangle:()=>void
     addDiamond:()=>void
-    fillColor: string,
-    strokeColor: string,
-    strokeWidth: number,
+    getActiveFillColor: ()=>string,
+    getActiveStrokeColor: ()=>string, 
+    getActiveStrokeWidth:()=>number;
+    getActiveStrokeDashArray:()=>number[];
     canvas: fabric.Canvas,
-    selectedObjects:fabric.Object[]
+    selectedObjects:fabric.Object[],
 }
