@@ -1,6 +1,6 @@
 "use client"
 
-import { ImageIcon, LayoutTemplate, Pencil, Presentation, Settings, Shapes, Sparkles, Type } from "lucide-react"
+import { ImageIcon, LayoutTemplate, Settings, Shapes, Sparkles, Type } from "lucide-react"
 import { SidebarItem } from "./sidebar-item"
 import { ActiveTool } from "../types";
 

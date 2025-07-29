@@ -152,6 +152,7 @@ export type BuildEditorProps = {
 }
 
 export interface Editor {
+    addImage:(value:string)=>void;
     delete:()=>void
     getActiveFontSize:()=>number
     changeFontSize:(value:number)=>void
