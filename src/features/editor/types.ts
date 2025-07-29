@@ -23,6 +23,32 @@ export const fonts = [
   "Lucida Console"
 ]
 
+export const filters = [
+  "polaroid",
+  "sepia",
+  "kodachrome",
+  "contrast",
+  "brightness",
+  "grayscale",
+  "brownie",
+  "vintage",
+  "technicolor",
+  "pixelate",
+  "invert",
+  "blur",
+  "sharpen",
+  "emboss",
+  "removecolor",
+  "blacknwhite",
+  "vibrance",
+  "blendcolor",
+  "huerotate",
+  "resize",
+  "gamma",
+  "saturation"
+];
+
+
 export const selectionDependentTools = [
     "fill",
     "font",
@@ -152,6 +178,7 @@ export type BuildEditorProps = {
 }
 
 export interface Editor {
+    changeImageFilter:(value:string)=>void
     addImage:(value:string)=>void;
     delete:()=>void
     getActiveFontSize:()=>number

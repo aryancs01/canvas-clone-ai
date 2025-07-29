@@ -1,4 +1,8 @@
 @import "tailwindcss";
+
+
+@import "uploadthing/tw/v4";
+@import "@uploadthing/react/styles.css";
 @import "tw-animate-css";
 @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Poppins&family=Oswald&family=Open+Sans&family=Playfair+Display&family=DM+Sans&display=swap');
 
