@@ -5,8 +5,12 @@ import { useAutoResize } from "./use-auto-resize"
 import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, FONT_SIZE, FONT_WEIGHT, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
 import { useCanvasEvents } from "./use-canvas-events"
 import { createFilter, isTextType } from "../utils"
+import { useClipboard } from "./use-clipboard"
 
 const buildEditor = ({
+    autoZoom,
+    copy,
+    paste,
     canvas,
     fillColor,
     setFillColor,
@@ -41,6 +45,50 @@ const buildEditor = ({
         canvas.setActiveObject(object)
     }
     return {
+        autoZoom,
+        getWorkspace,
+        zoomIn:()=>{
+            let zoomRatio = canvas.getZoom();
+            zoomRatio += 0.05;
+            const center = canvas.getCenter();
+            canvas.zoomToPoint(
+                new fabric.Point(center.left,center.top),
+                zoomRatio > 1 ? 1 : zoomRatio
+            )
+        },
+        zoomOut:()=>{
+            let zoomRatio = canvas.getZoom();
+            zoomRatio -= 0.05;
+            const center = canvas.getCenter();
+            canvas.zoomToPoint(
+                new fabric.Point(center.left,center.top),
+                zoomRatio < 0.2 ? 0.2 : zoomRatio
+            )
+        },
+        changeSize:(value: { width: number, height: number})=>{
+            const workspace = getWorkspace();
+            workspace?.set(value)
+            autoZoom()
+            //save
+        },
+        changeBackground:(value:string)=>{
+            const workspace = getWorkspace();
+            workspace?.set({fill:value})
+            canvas.renderAll();
+        },
+        enableDrawingMode: ()=>{
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.width = strokeWidth;
+            canvas.freeDrawingBrush.color = strokeColor
+        },
+        disableDrawingMode:()=>{
+            canvas.isDrawingMode = false;
+        }
+        ,
+        onCopy:()=>copy(),
+        onPaste:()=>paste(),
         changeImageFilter:(value: string)=>{
             const objects = canvas.getActiveObjects();
             objects.forEach((object)=>{
@@ -239,6 +287,7 @@ const buildEditor = ({
             canvas.getActiveObjects().forEach((object)=>{
                 object.set({strokeWidth:value})
             })
+            canvas.freeDrawingBrush.width = value;
             canvas.renderAll()
         },
         changeStrokeDashArray:(value:number[])=>{
@@ -257,6 +306,7 @@ const buildEditor = ({
                 }   
                 object.set({stroke:value})
             })
+            canvas.freeDrawingBrush.color = value
             canvas.renderAll()
         },
         addCircle:()=>{
@@ -420,7 +470,9 @@ export const useEditor = ({
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH)
     const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY)
 
-    useAutoResize({canvas,container})
+    const {copy, paste} = useClipboard({canvas});
+
+    const {autoZoom} = useAutoResize({canvas,container})
 
     useCanvasEvents({
         canvas,setSelectedObjects,clearSelectionCallback
@@ -429,6 +481,9 @@ export const useEditor = ({
     const editor = useMemo(()=>{
         if(canvas){
             return buildEditor({
+                autoZoom,
+                copy,
+                paste,
                 canvas,
                 fillColor,
                 setFillColor,
@@ -446,6 +501,9 @@ export const useEditor = ({
 
         return undefined
     },[
+        autoZoom,
+        copy,
+        paste,
         canvas,
         fillColor,
         strokeColor,

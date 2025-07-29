@@ -2,7 +2,7 @@ import { ActiveTool, Editor, FONT_SIZE, FONT_WEIGHT } from "../types"
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, TrashIcon } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, Copy, TrashIcon } from "lucide-react";
 import { BsBorderWidth } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { TbColorFilter } from "react-icons/tb"
@@ -382,7 +382,20 @@ export function Toolbar({
                         </Button>
                     </Hint>
                 </div>
-
+                <div className="flex items-center h-full justify-center ">
+                    <Hint label="Duplicate" side="bottom" sideOffset={5}>
+                        <Button
+                            onClick={()=>{
+                                editor?.onCopy()
+                                editor?.onPaste()
+                            }}
+                            size="icon"
+                            variant="ghost"
+                        >
+                           <Copy className="size-4" />
+                        </Button>
+                    </Hint>
+                </div>
                 <div className="flex items-center h-full justify-center ">
                     <Hint label="Delete" side="bottom" sideOffset={5}>
                         <Button
