@@ -12,6 +12,7 @@ import { BsCloudCheck } from "react-icons/bs"
 import { ActiveTool, Editor } from "../types"
 import { cn } from "@/lib/utils"
 import { useFilePicker } from "use-file-picker"
+import  UserButton  from "@/features/auth/components/user-button"
 
 interface NavbarProps {
     editor:Editor | undefined
@@ -30,7 +31,6 @@ export function Navbar({
         onFilesSuccessfullySelected:({plainFiles}:any)=>{
             if(plainFiles && plainFiles.length > 0){
                 const file = plainFiles[0]
-                console.log("file",file)
                 const reader = new FileReader();
                 reader.readAsText(file, "UTF-8");
                 reader.onload = () => {
@@ -163,6 +163,7 @@ export function Navbar({
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <UserButton/>
                 </div>
             </div>
         </nav>
