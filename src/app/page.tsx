@@ -1,7 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
+import { protectServer } from "@/features/auth/utils";
 
-export default function Home() {
+export default async function Home() {
+  await protectServer();
+
+  const session = await auth()
+
   return (
-    <Button size="sm" variant={"outline"}>Click Me</Button>
+    <div>
+      {JSON.stringify(session)}
+    </div>
   );
 }
