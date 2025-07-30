@@ -2,12 +2,20 @@
 import { useCallback, useState, useMemo } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResize } from "./use-auto-resize"
-import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, FONT_SIZE, FONT_WEIGHT, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
+import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, FONT_SIZE, FONT_WEIGHT, JSON_KEYS, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
 import { useCanvasEvents } from "./use-canvas-events"
-import { createFilter, isTextType } from "../utils"
+import { createFilter, downlordFile, isTextType, transformText } from "../utils"
 import { useClipboard } from "./use-clipboard"
+import { useHistory } from "./use-history"
+import { useHotkeys } from "./use-hotkeys"
+import { useWindowEvents } from "./use-window-events"
 
 const buildEditor = ({
+    save,
+    undo,
+    redo,
+    canRedo,
+    canUndo,
     autoZoom,
     copy,
     paste,
@@ -24,6 +32,69 @@ const buildEditor = ({
     setFontFamily,
     fontFamily
 }:BuildEditorProps): Editor=>{
+    const generateSaveOptions = () => {
+        const { width, height, top, left} = getWorkspace() as fabric.Rect;
+
+        return {
+            name:"Image",
+            format:"png",
+            quality:1,
+            width,
+            height,
+            left,
+            top,
+        }
+    };
+
+    const savePng = ()=>{
+        const options = generateSaveOptions();
+
+        canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
+        const dataUrl = canvas.toDataURL(options);
+
+        downlordFile(dataUrl,"png")
+        autoZoom()
+    }
+
+    const saveSvg = ()=>{
+        const options = generateSaveOptions();
+
+        canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
+        const dataUrl = canvas.toDataURL(options);
+
+        downlordFile(dataUrl,"svg")
+        autoZoom()
+    }
+
+    const saveJpg = ()=>{
+        const options = generateSaveOptions();
+
+        canvas.setViewportTransform([1, 0, 0, 1, 0, 0])
+        const dataUrl = canvas.toDataURL(options);
+
+        downlordFile(dataUrl,"jpg")
+        autoZoom()
+    }
+
+    const saveJson = async()=>{
+        const dataUrl = canvas.toJSON(JSON_KEYS);
+
+        await transformText(dataUrl.objects)
+        const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(dataUrl, null, "\t")
+        )}`
+
+        downlordFile(fileString,"json")
+    }
+
+    const loadJson = (json: string) => {
+        const data = JSON.parse(json);
+
+        canvas.loadFromJSON(data, ()=>{
+            autoZoom()
+        })
+    }
+
     const getWorkspace = () => {
         return canvas
         .getObjects()
@@ -45,8 +116,15 @@ const buildEditor = ({
         canvas.setActiveObject(object)
     }
     return {
+        savePng,
+        saveJpg,
+        saveSvg,
+        saveJson,
+        loadJson,
         autoZoom,
         getWorkspace,
+        canUndo,
+        canRedo,
         zoomIn:()=>{
             let zoomRatio = canvas.getZoom();
             zoomRatio += 0.05;
@@ -69,12 +147,13 @@ const buildEditor = ({
             const workspace = getWorkspace();
             workspace?.set(value)
             autoZoom()
-            //save
+            save()
         },
         changeBackground:(value:string)=>{
             const workspace = getWorkspace();
             workspace?.set({fill:value})
             canvas.renderAll();
+            save()
         },
         enableDrawingMode: ()=>{
             canvas.discardActiveObject();
@@ -85,8 +164,9 @@ const buildEditor = ({
         },
         disableDrawingMode:()=>{
             canvas.isDrawingMode = false;
-        }
-        ,
+        },
+        onUndo:()=>undo(),
+        onRedo:()=>redo(),
         onCopy:()=>copy(),
         onPaste:()=>paste(),
         changeImageFilter:(value: string)=>{
@@ -470,17 +550,35 @@ export const useEditor = ({
     const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH)
     const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY)
 
+    useWindowEvents()
+
+    const {save,canRedo,canUndo,redo,undo,canvasHistory,setHistoryIndex} = useHistory({canvas});
+
     const {copy, paste} = useClipboard({canvas});
 
     const {autoZoom} = useAutoResize({canvas,container})
 
     useCanvasEvents({
-        canvas,setSelectedObjects,clearSelectionCallback
+        save,canvas,setSelectedObjects,clearSelectionCallback
+    })
+
+    useHotkeys({
+        canvas,
+        undo,
+        redo,
+        copy,
+        paste,
+        save
     })
 
     const editor = useMemo(()=>{
         if(canvas){
             return buildEditor({
+                save,
+                undo,
+                redo,
+                canRedo,
+                canUndo,
                 autoZoom,
                 copy,
                 paste,
@@ -501,6 +599,11 @@ export const useEditor = ({
 
         return undefined
     },[
+        save,
+        undo,
+        redo,
+        canRedo,
+        canUndo,
         autoZoom,
         copy,
         paste,
@@ -552,7 +655,13 @@ export const useEditor = ({
 
         setCanvas(initialCanvas)
         setContainer(initialContainer);
-    },[])
+        
+        const currentState = JSON.stringify(
+            initialCanvas.toJSON(JSON_KEYS)
+        )
+        canvasHistory.current = [currentState]
+        setHistoryIndex(0);
+    },[canvasHistory,setHistoryIndex]) // No need this is from useRef and useState
 
     return { init, editor}
 }

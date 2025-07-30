@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { RGBColor } from "react-color";
 import { fabric } from "fabric"
+import { uuid } from "uuidv4";
 export function isTextType(type:string | undefined){
     return type === "text" || type === "i-text" || type === "textbox"
 }
@@ -118,4 +120,26 @@ export const createFilter = (value:string) => {
     }
 
     return effect
+}
+
+export function downlordFile(file: string, type:string){
+    const anchorElement = document.createElement("a");
+
+    anchorElement.href = file;
+    anchorElement.download = `${uuid()}.${type}`
+    document.body.appendChild(anchorElement)
+    anchorElement.click()
+    anchorElement.remove()
+}
+
+export function transformText(objects: any){
+    if(!objects) return;
+
+    objects.forEach((item:any)=>{
+        if(item.objects){
+            transformText(item.objects)
+        }else {
+            item.type === "text" && (item.type === "textbox")
+        }
+    })
 }
