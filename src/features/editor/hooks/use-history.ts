@@ -4,9 +4,14 @@ import { JSON_KEYS } from "../types";
 
 interface UserHistoryPage {
     canvas: fabric.Canvas | null
+    saveCallback?:(values:{
+        json: string;
+        height: number;
+        width: number;
+    })=>void
 }
 
-export const useHistory = ({ canvas }:UserHistoryPage) => {
+export const useHistory = ({ canvas, saveCallback }:UserHistoryPage) => {
     const [historyIndex, setHistoryIndex] = useState(0);
     const canvasHistory = useRef<string[]>([])
     const skipSave = useRef(false);
@@ -30,8 +35,13 @@ export const useHistory = ({ canvas }:UserHistoryPage) => {
             setHistoryIndex(canvasHistory.current.length)
         }
 
-        //TODO save callback
-    },[canvas])
+        const workspace = canvas.getObjects().find((object)=>object.name === "clip")
+
+        const height = workspace?.height || 0;
+        const width = workspace?.width || 0
+
+        saveCallback?.({json,height,width})
+    },[canvas,saveCallback])
 
     const undo = useCallback(()=>{
         if(canUndo()){

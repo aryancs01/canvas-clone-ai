@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -21,12 +22,28 @@ import { AISidebar } from "./ai-sidebar"
 import { DrawSidebar } from "./draw-sidebar"
 import { SettingSidebar } from "./settings-sidebar"
 import { ResponseType } from "@/features/projects/use-get-projects"
+import { useUpdateProject } from "@/features/projects/use-update-project"
+import debounce from "lodash.debounce";
 
 interface EditorProps {
     initialData:ResponseType["data"]
 }
 
-export function Editor({initialData}:EditorProps){
+export function Editor({ initialData }:EditorProps){
+    const { mutate } = useUpdateProject(initialData.id);
+
+    const debounceSave = useCallback(
+        debounce(
+            (values:{
+                json:string,
+                height:number,
+                width:number
+            })=>{
+            mutate(values);
+        },
+        500
+    ), [mutate])
+
     const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
     const onClearSelection = useCallback(()=>{
@@ -36,7 +53,11 @@ export function Editor({initialData}:EditorProps){
     },[activeTool])
 
     const { init,editor } = useEditor({
-        clearSelectionCallback:onClearSelection
+        clearSelectionCallback:onClearSelection,
+        saveCallback:debounceSave,
+        defaultState:initialData.json,
+        defaultWidth:initialData.width,
+        defaultHeight:initialData.height
     })
 
     const onChangeActiveTool = useCallback((tool:ActiveTool)=>{
@@ -80,6 +101,7 @@ export function Editor({initialData}:EditorProps){
     return (
         <div className="h-full flex flex-col">
             <Navbar
+                id={initialData.id}
                 editor={editor}
                 activeTool={activeTool}
                 onChangeActiveTool={onChangeActiveTool}

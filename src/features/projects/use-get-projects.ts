@@ -5,7 +5,6 @@ import { InferResponseType } from "hono";
 export type ResponseType = InferResponseType<typeof client.api.projects[":id"]["$get"],200>
 
 export const useGetProject = (id:string) => {
-
     const query = useQuery({
         enabled:!!id,
         queryKey:["project",{id}],

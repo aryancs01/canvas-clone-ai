@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useCallback, useState, useMemo } from "react"
+import { useCallback, useState, useMemo, useRef } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResize } from "./use-auto-resize"
 import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, EditorHookProps, FILL_COLOR, FONT_FAMILY, FONT_SIZE, FONT_WEIGHT, JSON_KEYS, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "../types"
@@ -9,6 +9,7 @@ import { useClipboard } from "./use-clipboard"
 import { useHistory } from "./use-history"
 import { useHotkeys } from "./use-hotkeys"
 import { useWindowEvents } from "./use-window-events"
+import { useLoadState } from "./use-load-state"
 
 const buildEditor = ({
     save,
@@ -538,8 +539,16 @@ const buildEditor = ({
 }
 
 export const useEditor = ({
-    clearSelectionCallback
+    clearSelectionCallback,
+    saveCallback,
+    defaultState,
+    defaultWidth,
+    defaultHeight
 }: EditorHookProps) => {
+    const initialState = useRef(defaultState);
+    const initialWidth = useRef(defaultWidth);
+    const initialHeight = useRef(defaultHeight);
+
     const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
@@ -552,7 +561,7 @@ export const useEditor = ({
 
     useWindowEvents()
 
-    const {save,canRedo,canUndo,redo,undo,canvasHistory,setHistoryIndex} = useHistory({canvas});
+    const {save,canRedo,canUndo,redo,undo,canvasHistory,setHistoryIndex} = useHistory({canvas,saveCallback});
 
     const {copy, paste} = useClipboard({canvas});
 
@@ -569,6 +578,14 @@ export const useEditor = ({
         copy,
         paste,
         save
+    })
+
+    useLoadState({
+        autoZoom,
+        canvas,
+        canvasHistory,
+        initialState,
+        setHistoryIndex
     })
 
     const editor = useMemo(()=>{
@@ -634,8 +651,8 @@ export const useEditor = ({
         });
 
         const initialWorkspace = new fabric.Rect({
-            width:900,
-            height:1200,
+            width:initialWidth.current,
+            height:initialHeight.current,
             name:"clip",
             fill:"white",
             selectable:false,
