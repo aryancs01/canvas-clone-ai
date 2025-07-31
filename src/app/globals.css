@@ -1,6 +1,4 @@
 @import "tailwindcss";
-
-
 @import "uploadthing/tw/v4";
 @import "@uploadthing/react/styles.css";
 @import "tw-animate-css";
@@ -245,4 +243,15 @@ body {
   src: url('/fonts/EBGaramond-VariableFont_wght.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
+}
+
+
+.banner {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .banner{
+    display: flex;
+  }
 }
