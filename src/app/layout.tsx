@@ -31,6 +31,11 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
+        <link
+          precedence="default"
+          rel="stylesheet"
+          href="https://unpkg.com/claymorphism-css/dist/clay.css"
+        />
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
