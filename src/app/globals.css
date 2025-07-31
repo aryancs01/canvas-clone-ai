@@ -250,8 +250,15 @@ body {
   display: none;
 }
 
+.measurment {
+  display:none
+}
+
 @media (min-width: 768px) {
   .banner{
     display: flex;
+  }
+  .measurment {
+    display: table-cell;
   }
 }

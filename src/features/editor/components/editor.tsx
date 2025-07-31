@@ -21,7 +21,7 @@ import { FilterSidebar } from "./filter-sidebar"
 import { AISidebar } from "./ai-sidebar"
 import { DrawSidebar } from "./draw-sidebar"
 import { SettingSidebar } from "./settings-sidebar"
-import { ResponseType } from "@/features/projects/use-get-projects"
+import { ResponseType } from "@/features/projects/use-get-project"
 import { useUpdateProject } from "@/features/projects/use-update-project"
 import debounce from "lodash.debounce";
 
