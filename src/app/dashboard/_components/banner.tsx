@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { useCreateProject } from "@/features/projects/use-create-project"
+import { useCreateProject } from "@/features/projects/api/use-create-project"
 import { ArrowRight, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 

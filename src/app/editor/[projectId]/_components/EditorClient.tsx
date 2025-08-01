@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Editor } from "@/features/editor/components/editor";
-import { useGetProject } from "@/features/projects/use-get-project";
+import { useGetProject } from "@/features/projects/api/use-get-project";
 import { Loader, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 

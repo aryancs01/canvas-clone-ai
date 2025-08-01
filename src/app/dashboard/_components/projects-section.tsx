@@ -1,16 +1,37 @@
 "use client"
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { useGetProjects } from "@/features/projects/use-get-projects"
+import { useGetProjects } from "@/features/projects/api/use-get-projects"
 import { AlertTriangle, CopyIcon, FileIcon, Loader, MoreHorizontal, Search, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns"
 import React from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useDuplicateProject } from "@/features/projects/api/use-duplicate-project";
+import { useDeleteProject } from "@/features/projects/api/use-delete-project";
+import { useConfirm } from "@/hooks/use-confirm";
 
 export const ProjectSection = () => {
+    const [ConfirmationDialog, confirm] = useConfirm(
+        "Are you sure?",
+        "You are about to delete this project"
+    )
+    const duplicateMutation = useDuplicateProject()
+    const deleteMutation = useDeleteProject()
+    
     const router = useRouter();
+
+    const onCopy = (id:string)=>{
+        duplicateMutation.mutate({id})
+    }
+
+    const onDelete = async (id:string) => {
+        const ok = await confirm()
+        if(ok){
+            deleteMutation.mutate({id})
+        }
+    }
 
     const {
         data,
@@ -67,6 +88,7 @@ export const ProjectSection = () => {
 
     return (
         <div className="space-y-4">
+            <ConfirmationDialog/>
             <h3 className="font-semibold text-lg">
                 Recent Project
             </h3>
@@ -108,16 +130,16 @@ export const ProjectSection = () => {
                                             <DropdownMenuContent className="w-60" align="end">
                                                 <DropdownMenuItem 
                                                     className="h-10 cursor-pointer"
-                                                    disabled={false}
-                                                    onClick={()=>{}}
+                                                    disabled={duplicateMutation.isPending}
+                                                    onClick={()=>onCopy(project.id)}
                                                 >
                                                     <CopyIcon className="size-4 mr-2"/>
                                                     Make a copy
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem 
                                                     className="h-10 cursor-pointer"
-                                                    disabled={false}
-                                                    onClick={()=>{}}
+                                                    disabled={deleteMutation.isPending}
+                                                    onClick={()=>onDelete(project.id)}
                                                 >
                                                     <Trash className="size-4 mr-2"/>
                                                     Delete

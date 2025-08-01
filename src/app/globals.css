@@ -16,6 +16,12 @@ body {
   color:#fff;
 }
 
+.dialog-centered {
+--tw-translate-x: -50%;
+--tw-translate-y: -50%;
+translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
