@@ -70,7 +70,7 @@ export const ProjectSection = () => {
         )
     }
 
-    if(!data?.pages.length){
+    if(!data?.pages.length || !data.pages[0].data.length){
         return (
             <div className="space-y-4">
                 <h3 className="font-semibold text-lg">

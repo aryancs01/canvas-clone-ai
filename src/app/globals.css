@@ -305,3 +305,84 @@ translate: var(--tw-translate-x) var(--tw-translate-y);
   border-bottom: 60vh solid #e8a229; 
 }
 
+
+.template-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.template-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.template-card-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  width: 100%;
+}
+
+.template-card-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.template-card:hover .template-card-image-wrapper img {
+  transform: scale(1.05);
+}
+
+.template-card-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.template-card:hover .template-card-overlay {
+  opacity: 1;
+}
+
+.template-card-crown {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 9999px;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.template-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.template-card-description {
+  font-size: 0.75rem;
+  color: var(--muted-foreground, #666); /* fallback if you don't use CSS vars */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.template-card:hover .template-card-description {
+  opacity: 0.75;
+}
+

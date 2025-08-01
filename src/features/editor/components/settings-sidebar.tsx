@@ -72,7 +72,7 @@ export function SettingSidebar({
                 title="Settings"
                 description="Change the look of your workspace"
             />
-            <ScrollArea>
+            <ScrollArea className="overflow-hidden">
                 <form className="space-y-4 p-4" onSubmit={onSubmit}>
                     <div className="space-y-2">
                         <Label>
