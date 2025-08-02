@@ -32,7 +32,7 @@ export default function SignInCard(){
     }
 
     const onProviderSignIn = (provider: "github" | "google") => {
-        signIn(provider, { callbackUrl:"/"})
+        signIn(provider, { callbackUrl:"/dashboard"})
     }
 
     return (
@@ -89,7 +89,7 @@ export default function SignInCard(){
                     className="w-full relative"
                 >
                     <FcGoogle className="mr-2 size-5 top-2.5 left-2.5 absolute"/>
-                    Continue with Github
+                    Continue with Google
                 </Button>
             </div>
             <p className="text-xs text-muted-foreground">
