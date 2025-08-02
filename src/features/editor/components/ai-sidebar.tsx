@@ -61,9 +61,7 @@ export function AISidebar({
                 <div className="p-4 space-y-4">
                    <form onSubmit={onSubmit} className="p-4 space-y-6">
                         <Textarea
-                            
-                            placeholder="an astronaut riding a horse on mars, hd, dramatic lighting"
-                            cols={30}
+                            placeholder="Sorry No AI Feature...."
                             rows={10}
                             required
                             minLength={3}
@@ -71,7 +69,7 @@ export function AISidebar({
                             onChange={(e)=> setValue(e.target.value)}
                         />
                         <Button 
-                            
+                            disabled={true}
                             type="submit" 
                             className="w-full"
                         >

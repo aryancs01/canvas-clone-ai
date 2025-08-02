@@ -26,7 +26,7 @@ export default function EditorClientPage({id}:EditorClientProps){
                 <TriangleAlert className="size-6 text-muted-foreground"/>
                 <p className="text-muted-foreground text-sm">Failed to fetch project</p>
                 <Button asChild variant="secondary" >
-                    <Link href="/" >
+                    <Link href="/dashboard" >
                         Back to Home
                     </Link>
                 </Button>

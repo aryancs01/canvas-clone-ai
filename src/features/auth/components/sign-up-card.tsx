@@ -31,7 +31,7 @@ export default function SignUpCard(){
                 signIn("credentials",{
                     email,
                     password,
-                    callbackUrl:"/"
+                    callbackUrl:"/dashboard"
                 })
             }
         })

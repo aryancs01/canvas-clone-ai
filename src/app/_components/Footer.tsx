@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Twitter, Linkedin, Github, Mail, MapPin, X } from "lucide-react"
+import { Mail, MapPin } from "lucide-react"
+import { FaXTwitter, FaLinkedin, FaGithub } from "react-icons/fa6";
+
 import Image from "next/image"
 import Link from "next/link"
 
@@ -107,7 +109,7 @@ export default function FooterComponent() {
               <span className="text-slate-300 text-sm sm:text-base truncate">aryan1032saxena@gmail.com</span>
             </div>
             <div className="flex items-center justify-center sm:justify-start">
-              <X className="w-6 h-6 sm:w-8 sm:h-8 mr-2 text-blue-400 flex-shrink-0" />
+              <FaXTwitter className="w-6 h-6 sm:w-8 sm:h-8 mr-2 text-blue-400 flex-shrink-0" />
               <span className="text-slate-300 text-sm sm:text-base">aryandev_</span>
             </div>
             <div className="flex items-center justify-center sm:justify-start sm:col-span-2 lg:col-span-1">
@@ -130,21 +132,21 @@ export default function FooterComponent() {
                   className="text-slate-400 hover:text-white transition-colors"
                   aria-label="Twitter"
                 >
-                  <Twitter className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaXTwitter className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
                 <Link
                   href="https://www.linkedin.com/in/aryan-saxena12/"
                   className="text-slate-400 hover:text-white transition-colors"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaLinkedin className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
                 <Link
                   href="https://github.com/aryancs01"
                   className="text-slate-400 hover:text-white transition-colors"
                   aria-label="GitHub"
                 >
-                  <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaGithub className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
               </div>
             </div>

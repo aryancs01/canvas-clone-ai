@@ -27,7 +27,7 @@ export default function SignInCard(){
         signIn("credentials",{
             email:email,
             password:password,
-            callbackUrl:"/"
+            callbackUrl:"/dashboard"
         })
     }
 
