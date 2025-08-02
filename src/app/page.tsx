@@ -21,7 +21,7 @@ export default function HomePage() {
       <GridPatternLinearGradient />
 
       <div className="mx-2 md:mx-7 lg:mx-32 mt-10 relative z-10">
-        <div className="w-full bg-[#3a3a3a] h-10 rounded-3xl flex items-center justify-between px-2 overflow-hidden">
+        <div className="w-full bg-[#3a3a3a] h-10 p-2 rounded-3xl flex items-center justify-between px-2 overflow-hidden">
           <div className="flex items-center gap-x-2 bg-white px-3 rounded-2xl">
             <div className="relative">
               <Image width={36} height={36} src="/logo.svg" alt="logo" />
@@ -53,7 +53,7 @@ export default function HomePage() {
 
         <div className="w-full h-[200px] lg:h-[600px] mt-10 lg:mt-20">
             <video autoPlay loop muted className="w-full h-full rounded-md">
-                <source src="/SampleVideo_1280x720_1mb.mp4" type="video/mp4" />
+                <source src="/canva.webm" type="video/webm" />
                 Your browser does not support the video tag.
             </video>
         </div>
