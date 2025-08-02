@@ -5,7 +5,7 @@ export function Sidebar() {
     return (
         <aside className="invisible lg:visible lg:flex fixed flex-col w-[300px] left-0 shrink-0 h-full">
             <Logo/>
-            <SidebarRoutes/>
+            <SidebarRoutes />
         </aside>
     )
 }

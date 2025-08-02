@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useGenerateImage } from "@/features/ai/api/use-generate-image"
 import { useState } from "react"
+import { usePaywall } from "@/features/subscriptions/hooks/use-paywall"
 
 interface AISidebarProps {
     editor:Editor | undefined
@@ -19,6 +20,7 @@ export function AISidebar({
     activeTool,
     onChangeActiveTool
 }:AISidebarProps){
+    const { shouldBlock, triggerPaywall } = usePaywall()
     const mutation = useGenerateImage();
 
     const [value, setValue] = useState("");
@@ -27,6 +29,11 @@ export function AISidebar({
         e:React.FormEvent<HTMLFormElement>
     ) => {
         e.preventDefault()
+
+        if(shouldBlock){
+            triggerPaywall()
+            return;
+        }
 
         mutation.mutate({prompt:value},{
             onSuccess: ({data}) => {
@@ -54,7 +61,7 @@ export function AISidebar({
                 <div className="p-4 space-y-4">
                    <form onSubmit={onSubmit} className="p-4 space-y-6">
                         <Textarea
-                            disabled={true}
+                            
                             placeholder="an astronaut riding a horse on mars, hd, dramatic lighting"
                             cols={30}
                             rows={10}
@@ -64,7 +71,7 @@ export function AISidebar({
                             onChange={(e)=> setValue(e.target.value)}
                         />
                         <Button 
-                            disabled={true}
+                            
                             type="submit" 
                             className="w-full"
                         >

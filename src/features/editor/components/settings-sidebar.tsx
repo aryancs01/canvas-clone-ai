@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { ActiveTool, Editor, FILL_COLOR } from "../types"
+import { ActiveTool, Editor } from "../types"
 import { ToolSidebarHeader } from "./tool-sidebar-header"
 import { ToolSidebarClose } from "./tool-sidebar-close"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -7,7 +7,6 @@ import { ColorPicker } from "./color-picker"
 import { useEffect, useMemo, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Weight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface SettingSidebarProps {

@@ -38,7 +38,7 @@ export default function SignUpCard(){
     }
 
     const onProviderSignUp = (provider: "github" | "google") => {
-        signIn(provider, { callbackUrl:"/"})
+        signIn(provider, { callbackUrl:"/dashboard"})
     }
 
     return (

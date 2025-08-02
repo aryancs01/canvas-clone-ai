@@ -3,6 +3,7 @@ import {handle} from "hono/vercel"
 import { AuthConfig, initAuthConfig } from "@hono/auth-js"
 import { env } from 'hono/adapter'
 
+import subscriptions from "./subscriptions"
 import images from "./images"
 import projects from "./projects"
 import users from "./users"
@@ -27,6 +28,7 @@ const routes = app
     .route("/ai",ai)
     .route("/users",users)
     .route("/projects",projects)
+    .route("/subscriptions",subscriptions)
 
 export const GET = handle(app);
 export const POST = handle(app);
